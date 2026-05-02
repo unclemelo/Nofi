@@ -1,0 +1,125 @@
+* {
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+:root {
+  --accent: #66c0f4;
+  --toast-width: 380px;
+  --toast-radius: 10px;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  pointer-events: none;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+}
+
+.overlay-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 24px 18px;
+}
+
+.toast-stack {
+  width: min(var(--toast-width), 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.toast {
+  width: 100%;
+  border: 1px solid #4f6a79;
+  border-left: 4px solid var(--accent);
+  background: linear-gradient(180deg, #1c2d3bf5, #141f2bf5);
+  border-radius: var(--toast-radius);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.48);
+  color: #d6e2ea;
+  padding: 10px 12px;
+  animation: toastIn 250ms ease;
+}
+
+.toast-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-avatar-wrap {
+  position: relative;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+}
+
+.toast-avatar {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border: 1px solid #607a89;
+}
+
+/* Small source-channel badge overlaid on the bottom-right of the sender avatar */
+.toast-source-icon {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border: 2px solid #0f1923;
+}
+
+.toast-content {
+  min-width: 0;
+}
+
+.emote {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.toast h4 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.name-badge {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+  vertical-align: text-bottom;
+  object-fit: contain;
+}
+
+.toast p {
+  margin: 5px 0 0;
+  color: #bdd1df;
+  font-size: 0.9rem;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

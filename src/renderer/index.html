@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nofi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" />
+  </head>
+  <body>
+    <!-- Custom titlebar -->
+    <div class="titlebar">
+      <div class="titlebar-drag">
+        <img class="titlebar-icon" src="../img/icon.png" alt="" />
+        <span class="titlebar-title">Nofi</span>
+      </div>
+      <div class="titlebar-controls">
+        <button class="titlebar-btn" id="minimizeBtn" title="Minimize"><i class="fa-solid fa-minus"></i></button>
+        <button class="titlebar-btn" id="maximizeBtn" title="Maximize"><i class="fa-regular fa-square"></i></button>
+        <button class="titlebar-btn close" id="closeBtn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+    <main class="app-shell">
+      <section class="panel config-panel">
+        <div class="panel-header">
+          <h1>Nofi</h1>
+          <p>Twitch login + desktop style live alerts</p>
+        </div>
+
+        <div class="status-line" id="authStatus">Not connected</div>
+
+        <label class="field">
+          <span>Twitch Client ID</span>
+          <input id="clientId" type="text" placeholder="Paste your Twitch app Client ID" />
+        </label>
+
+        <label class="field">
+          <span>Channel Name</span>
+          <input id="channelName" type="text" placeholder="Your Twitch channel" readonly />
+        </label>
+
+        <div class="toggle-grid">
+          <label><input type="checkbox" id="chatEnabled" checked /> <i class="fa-solid fa-comment"></i> Chat</label>
+          <label><input type="checkbox" id="followEnabled" checked /> <i class="fa-solid fa-heart"></i> Follows</label>
+          <label><input type="checkbox" id="subEnabled" checked /> <i class="fa-solid fa-star"></i> Subs</label>
+          <label><input type="checkbox" id="giftEnabled" checked /> <i class="fa-solid fa-gift"></i> Gift Subs</label>
+          <label><input type="checkbox" id="bitsEnabled" checked /> <i class="fa-solid fa-gem"></i> Bits</label>
+        </div>
+
+        <div class="button-row">
+          <button id="loginBtn" class="btn primary"><i class="fa-brands fa-twitch"></i> Login with Twitch</button>
+          <button id="connectBtn" class="btn success"><i class="fa-solid fa-play"></i> Connect</button>
+          <button id="disconnectBtn" class="btn"><i class="fa-solid fa-stop"></i> Disconnect</button>
+          <button id="logoutBtn" class="btn danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+
+        <details class="settings-section" id="settingsDetails">
+          <summary class="settings-summary"><i class="fa-solid fa-gear"></i> Settings</summary>
+          <div class="settings-body">
+            <div class="toggle-grid">
+              <label><input type="checkbox" id="autoConnectToggle" /> <i class="fa-solid fa-bolt"></i> Auto-connect</label>
+              <label><input type="checkbox" id="soundToggle" checked /> <i class="fa-solid fa-volume-high"></i> Sound</label>
+              <label><input type="checkbox" id="closeToTrayToggle" checked /> <i class="fa-solid fa-window-minimize"></i> Close to tray</label>
+              <label><input type="checkbox" id="nameColorAccentToggle" /> <i class="fa-solid fa-palette"></i> Use Twitch name color for accents</label>
+            </div>
+
+            <label class="field">
+              <span>Accent Color</span>
+              <input type="color" id="accentColorPicker" value="#66c0f4" class="color-picker" />
+            </label>
+
+            <label class="field">
+              <span>Notification Duration &mdash; <em id="durationLabel">5.2s</em></span>
+              <input type="range" id="durationSlider" min="2000" max="12000" step="500" value="5200" class="slider" />
+            </label>
+
+            <label class="field">
+              <span>Notification Width &mdash; <em id="widthLabel">380px</em></span>
+              <input type="range" id="widthSlider" min="260" max="520" step="10" value="380" class="slider" />
+            </label>
+
+            <label class="field">
+              <span>Notification Corner Radius &mdash; <em id="radiusLabel">10px</em></span>
+              <input type="range" id="radiusSlider" min="0" max="30" step="1" value="10" class="slider" />
+            </label>
+
+            <label class="field">
+              <span>Notification Position</span>
+              <select id="positionSelect" class="select-input">
+                <option value="bottom-right">Bottom Right</option>
+                <option value="bottom-left">Bottom Left</option>
+                <option value="top-right">Top Right</option>
+                <option value="top-left">Top Left</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Scrollbars</span>
+              <select id="scrollbarModeSelect" class="select-input">
+                <option value="default">Default</option>
+                <option value="colored">Colored</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Scrollbar Color</span>
+              <input type="color" id="scrollbarColorPicker" value="#4ec5ff" class="color-picker" />
+            </label>
+
+            <p class="hint">These notifications are the popups that appear on your overlay while you stream.</p>
+
+            <div class="update-card">
+              <div class="update-header-row">
+                <strong>App Updates</strong>
+                <span id="updateVersionText">Current version</span>
+              </div>
+              <p id="updateStatusText" class="update-status-text">Checking update support...</p>
+              <div class="update-actions">
+                <button id="checkUpdatesBtn" class="btn"><i class="fa-solid fa-rotate"></i> Check for Updates</button>
+                <button id="installUpdateBtn" class="btn success" style="display: none;"><i class="fa-solid fa-download"></i> Restart to Install</button>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <p class="hint">
+          Scopes requested: chat:read, channel:read:subscriptions, moderator:read:followers,
+          bits:read.
+        </p>
+      </section>
+
+      <section class="panel preview-panel">
+        <div class="panel-header">
+          <h2>Notification Feed</h2>
+          <div class="test-row">
+            <button id="testChatBtn" class="btn"><i class="fa-solid fa-comment"></i> Chat</button>
+            <button id="testFollowBtn" class="btn"><i class="fa-solid fa-heart"></i> Follow</button>
+            <button id="testSubBtn" class="btn"><i class="fa-solid fa-star"></i> Sub</button>
+            <button id="testGiftBtn" class="btn"><i class="fa-solid fa-gift"></i> Gift</button>
+            <button id="testBitsBtn" class="btn"><i class="fa-solid fa-gem"></i> Bits</button>
+            <button id="testSharedBtn" class="btn"><i class="fa-solid fa-share-nodes"></i> Shared</button>
+          </div>
+        </div>
+        <div id="feed" class="feed"></div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
