@@ -52,10 +52,12 @@
         "provider": "github",
         "owner": "unclemelo",
         "repo": "Nofi",
+        "vPrefixedTagName": true,
         "releaseType": "release"
       }
     ],
     "nsis": {
+      "artifactName": "${productName} Setup.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
