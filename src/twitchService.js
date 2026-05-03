@@ -355,6 +355,18 @@ class TwitchService {
       });
     }
 
+    if (this.eventFilters.redeem) {
+      requests.push({
+        type: "channel.channel_points_custom_reward_redemption.add",
+        version: "1",
+        condition: { broadcaster_user_id: broadcasterUserId },
+        transport: {
+          method: "websocket",
+          session_id: sessionId
+        }
+      });
+    }
+
     for (const body of requests) {
       const response = await fetch(`${HELIX_BASE}/eventsub/subscriptions`, {
         method: "POST",
@@ -460,6 +472,23 @@ class TwitchService {
         actorId: isAnonymous ? null : (event.user_id || null),
         actorLogin: isAnonymous ? null : (event.user_login || null),
         actorName: cheerer
+      });
+      return;
+    }
+
+    if (subscriptionType === "channel.channel_points_custom_reward_redemption.add") {
+      const redeemer = event.user_name || "A viewer";
+      const rewardTitle = event.reward?.title || "Channel Points Reward";
+      const cost = Number(event.reward?.cost || 0);
+      const userInput = event.user_input ? ` — "${event.user_input}"` : "";
+
+      await this.emitActorEvent({
+        type: "redeem",
+        title: rewardTitle,
+        message: `${redeemer} redeemed for ${cost.toLocaleString()} points${userInput}`,
+        actorId: event.user_id || null,
+        actorLogin: event.user_login || null,
+        actorName: redeemer
       });
     }
   }

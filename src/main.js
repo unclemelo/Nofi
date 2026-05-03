@@ -327,6 +327,13 @@ ipcMain.handle("overlay:testNotificationByType", async (_event, type) => {
       actorColor: "#b16cff",
       sourceChannelLogin: "otherstreamer",
       sourceChannelImageUrl: "../img/icon.png"
+    },
+    redeem: {
+      type: "redeem",
+      title: "Hydrate!",
+      message: "RedeemTester redeemed for 500 points",
+      actorName: "RedeemTester",
+      actorColor: "#f5a623"
     }
   };
 

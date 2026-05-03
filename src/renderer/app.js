@@ -14,6 +14,7 @@ const testSubBtn = document.getElementById("testSubBtn");
 const testGiftBtn = document.getElementById("testGiftBtn");
 const testBitsBtn = document.getElementById("testBitsBtn");
 const testSharedBtn = document.getElementById("testSharedBtn");
+const testRedeemBtn = document.getElementById("testRedeemBtn");
 const autoConnectToggle = document.getElementById("autoConnectToggle");
 const soundToggle = document.getElementById("soundToggle");
 const closeToTrayToggle = document.getElementById("closeToTrayToggle");
@@ -39,7 +40,8 @@ const toggles = {
   follow: document.getElementById("followEnabled"),
   sub: document.getElementById("subEnabled"),
   gift: document.getElementById("giftEnabled"),
-  bits: document.getElementById("bitsEnabled")
+  bits: document.getElementById("bitsEnabled"),
+  redeem: document.getElementById("redeemEnabled")
 };
 
 let session = null;
@@ -52,7 +54,8 @@ const defaultScopes = [
   "chat:read",
   "moderator:read:followers",
   "channel:read:subscriptions",
-  "bits:read"
+  "bits:read",
+  "channel:read:redemptions"
 ];
 
 init();
@@ -85,13 +88,14 @@ async function init() {
       const channel = (savedSettings.lastChannel || session.auth.login || "").trim();
       if (channel) {
         const eventFilters = savedSettings.lastEventFilters ||
-          { chat: true, follow: true, sub: true, gift: true, bits: true };
+          { chat: true, follow: true, sub: true, gift: true, bits: true, redeem: true };
         channelInput.value = channel;
         if (eventFilters.chat !== undefined) toggles.chat.checked = eventFilters.chat;
         if (eventFilters.follow !== undefined) toggles.follow.checked = eventFilters.follow;
         if (eventFilters.sub !== undefined) toggles.sub.checked = eventFilters.sub;
         if (eventFilters.gift !== undefined) toggles.gift.checked = eventFilters.gift;
         if (eventFilters.bits !== undefined) toggles.bits.checked = eventFilters.bits;
+        if (eventFilters.redeem !== undefined) toggles.redeem.checked = eventFilters.redeem;
         try {
           const result = await window.overlayAPI.connectTwitch({ channel, eventFilters });
           authStatus.textContent = `Auto-connected as ${session.auth.login} → #${result.channel}`;
@@ -282,6 +286,10 @@ testSharedBtn.addEventListener("click", () => {
   window.overlayAPI.emitTestNotificationByType("shared");
 });
 
+testRedeemBtn.addEventListener("click", () => {
+  window.overlayAPI.emitTestNotificationByType("redeem");
+});
+
 // Wire settings controls — save immediately on any change.
 autoConnectToggle.addEventListener("change", saveSettingsFromUI);
 soundToggle.addEventListener("change", saveSettingsFromUI);
@@ -433,7 +441,8 @@ function getEventFilters() {
     follow: toggles.follow.checked,
     sub: toggles.sub.checked,
     gift: toggles.gift.checked,
-    bits: toggles.bits.checked
+    bits: toggles.bits.checked,
+    redeem: toggles.redeem.checked
   };
 }
 
@@ -443,6 +452,7 @@ function isEventEnabled(type) {
   if (type === "sub") return toggles.sub.checked;
   if (type === "gift") return toggles.gift.checked;
   if (type === "bits") return toggles.bits.checked;
+  if (type === "redeem") return toggles.redeem.checked;
   return true;
 }
 
